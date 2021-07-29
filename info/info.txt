@@ -1,0 +1,32 @@
+[auth]
+login: /auth/login (POST username, password)
+register: /auth/register (POST username, password)
+
+[db]
+ms: mariadb
+login: root
+password: 123
+db name: shortener
+
+[tables]
+- users {
+	id,
+	username,
+	password,
+}
+
+- urls {
+	id,
+	owner_id,
+	key,
+	value,
+}
+
+CRUD ops:
+create: /short/:link
+read: /:id (header Location=full_link)
+update: /:id
+delete: /:id
+
+example link:
+localhost:80/Y4bKczjr

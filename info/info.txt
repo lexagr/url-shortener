@@ -15,18 +15,21 @@ db name: shortener
 	password,
 }
 
-- urls {
+- links {
 	id,
 	owner_id,
-	key,
-	value,
+	short,
+	full,
 }
 
 CRUD ops:
-create: /short/:link
-read: /:id (header Location=full_link)
-update: /:id
-delete: /:id
+[POST, if JWT valid]: /:link
+[GET, public]: /:id (header Location=full_link)
+[POST, if JWT has valid owner for link]: /:id/:link
+[DELETE, if JWT has valid owner for link]: /:id
 
 example link:
-localhost:80/Y4bKczjr
+localhost:80/Y4bKczj
+
+link restrictions:
+host+domain length = 64

@@ -1,5 +1,6 @@
 # private configs
 ormconfig.json
+.env
 
 # compiled output
 /dist

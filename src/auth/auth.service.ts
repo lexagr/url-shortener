@@ -1,19 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import * as bcrypt from 'bcrypt';
 
-import { UserCredentialsDTO } from './dto/user_credentials.dto';
+import { UserCredentialsDTO } from '../dto/user_credentials.dto';
 import { User } from '../entities/user.entity';
-import { ConfigService } from '@nestjs/config';
+import { RefreshToken } from 'src/entities/refreshtoken.entity';
+import { RefreshTokenDTO } from 'src/dto/refresh_token.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(RefreshToken)
+    private readonly tokensRepository: Repository<RefreshToken>,
   ) {}
 
   private hashPassword(password: string): Promise<string> {
@@ -22,27 +29,45 @@ export class AuthService {
     return bcrypt.hash(password, saltRounds);
   }
 
-  async validateCredentials(username: string, password: string) {
-    const hashedPassword = await this.hashPassword(password);
+  filterUserForPublic(user: User) {
+    delete user.password;
+    return user;
+  }
 
+  async generateTokensForUser(user: User): Promise<any> {
+    user = this.filterUserForPublic(user);
+
+    let refreshToken = new RefreshToken();
+    refreshToken.owner = user;
+    refreshToken = await this.tokensRepository.save(refreshToken);
+
+    return {
+      access_token: this.jwtService.sign(
+        { user: user },
+        { expiresIn: '1h', subject: user.id.toString() },
+      ),
+      refresh_token: this.jwtService.sign(
+        { id: refreshToken.id },
+        { expiresIn: '1d', subject: user.id.toString() },
+      ),
+    };
+  }
+
+  async validateCredentials(username: string, password: string): Promise<any> {
     const user = await this.usersRepository.findOne({
       where: {
         username,
       },
     });
 
-    console.log('hashed password:', hashedPassword);
-    console.log(
-      'password comparing result:',
-      await bcrypt.compare(hashedPassword, user.password),
-    );
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return this.filterUserForPublic(user);
+    }
 
-    return user;
+    return null;
   }
 
   async registerNewUser(userCredentials: UserCredentialsDTO) {
-    console.log('Request for new registration:', userCredentials);
-
     let user = await this.usersRepository.findOne({
       username: userCredentials.username,
     });
@@ -55,10 +80,37 @@ export class AuthService {
       user = await this.usersRepository.save(user);
     }
 
-    if (user?.password) {
-      delete user.password;
-    }
+    const { id, username } = user;
 
-    return user;
+    return { id, username };
+  }
+
+  async refreshToken(refreshTokenDTO: RefreshTokenDTO) {
+    try {
+      const inputToken = this.jwtService.verify(refreshTokenDTO.token);
+
+      const refreshTokenInput = new RefreshToken();
+      refreshTokenInput.id = inputToken.id;
+
+      const deleteResult = await this.tokensRepository.delete(
+        refreshTokenInput,
+      );
+
+      // token was in db?
+      if (deleteResult?.affected <= 0) {
+        throw new HttpErrorByCode[400]();
+      }
+
+      // user is valid?
+      const user = await this.usersRepository.findOne({ id: +inputToken.sub });
+      if (!user) {
+        throw new HttpErrorByCode[400]();
+      }
+
+      // return new valid tokens
+      return await this.generateTokensForUser(user);
+    } catch (e) {
+      throw new HttpErrorByCode[400]();
+    }
   }
 }

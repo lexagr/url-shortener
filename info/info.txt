@@ -1,6 +1,7 @@
 [auth]
 login: /auth/login (POST username, password)
 register: /auth/register (POST username, password)
+refresh: /auth/refresh (POST token)
 
 [db]
 ms: mariadb
@@ -22,11 +23,16 @@ db name: shortener
 	full,
 }
 
+- refresh_tokens {
+	id,
+	owner_id,
+}
+
 CRUD ops:
-[POST, if JWT valid]: /:link
-[GET, public]: /:id (header Location=full_link)
-[POST, if JWT has valid owner for link]: /:id/:link
-[DELETE, if JWT has valid owner for link]: /:id
+[POST, if JWT valid]: / (POST link)
+[GET, public]: /:short_link (header Location=full_link)
+[POST, if JWT has valid owner for link]: /:short_link (POST link)
+[DELETE, if JWT has valid owner for link]: /:short_link
 
 example link:
 localhost:80/Y4bKczj

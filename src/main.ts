@@ -7,9 +7,10 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Shortener service')
-    .setDescription('URL Shortener service')
+    .setDescription('URL Shortener service API description')
     .setVersion('1.0')
     .addTag('shortener_service')
+    .addTag('auth')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

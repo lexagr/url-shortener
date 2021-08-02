@@ -11,6 +11,7 @@ import { UserCredentialsDTO } from '../dto/user_credentials.dto';
 import { User } from '../entities/user.entity';
 import { RefreshToken } from 'src/entities/refreshtoken.entity';
 import { RefreshTokenDTO } from 'src/dto/refresh_token.dto';
+import { AuthTokensDTO } from 'src/dto/auth_tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,23 +35,24 @@ export class AuthService {
     return user;
   }
 
-  async generateTokensForUser(user: User): Promise<any> {
+  async generateTokensForUser(user: User): Promise<AuthTokensDTO> {
     user = this.filterUserForPublic(user);
 
     let refreshToken = new RefreshToken();
     refreshToken.owner = user;
     refreshToken = await this.tokensRepository.save(refreshToken);
 
-    return {
-      access_token: this.jwtService.sign(
-        { user: user },
-        { expiresIn: '1h', subject: user.id.toString() },
-      ),
-      refresh_token: this.jwtService.sign(
-        { id: refreshToken.id },
-        { expiresIn: '1d', subject: user.id.toString() },
-      ),
-    };
+    const authTokens = new AuthTokensDTO();
+    authTokens.access_token = this.jwtService.sign(
+      { user: user },
+      { expiresIn: '1h', subject: user.id.toString() },
+    );
+    authTokens.refresh_token = this.jwtService.sign(
+      { id: refreshToken.id },
+      { expiresIn: '1d', subject: user.id.toString() },
+    );
+
+    return authTokens;
   }
 
   async validateCredentials(username: string, password: string): Promise<any> {

@@ -14,15 +14,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShortenerService } from './shortener.service';
 
 import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-import { ShortLinkDTO } from '../dto/short_link.dto';
-import { FullLinkDTO } from '../dto/full_link.dto';
-import { Link } from '../entities/link.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ShortenedLinkDTO } from 'src/dto/shortened_link.dto';
+import { ShortLinkDTO } from './dto/short_link.dto';
+import { FullLinkDTO } from './dto/full_link.dto';
+import { Link } from './entities/link.entity';
+import { ShortenedLinkDTO } from './dto/shortened_link.dto';
 
 @Controller()
 @ApiTags('shortener_service')
@@ -74,7 +74,6 @@ export class ShortenerController {
     @Body() newFullLink: FullLinkDTO,
     @Request() req,
   ) {
-    // console.log(req.user, shortLink, newFullLink);
     return this.shortenerService.updateLink(req.user, shortLink, newFullLink);
   }
 

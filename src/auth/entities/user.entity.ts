@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Link } from './link.entity';
+import { Link } from '../../shortener/entities/link.entity';
 import { RefreshToken } from './refreshtoken.entity';
 
 @Entity('users')

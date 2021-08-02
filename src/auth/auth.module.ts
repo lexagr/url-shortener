@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
-import { User } from '../entities/user.entity';
-import { Link } from '../entities/link.entity';
-import { RefreshToken } from 'src/entities/refreshtoken.entity';
+import { User } from './entities/user.entity';
+import { Link } from '../shortener/entities/link.entity';
+import { RefreshToken } from 'src/auth/entities/refreshtoken.entity';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';

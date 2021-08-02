@@ -1,17 +1,17 @@
-import { HttpCode, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { Repository } from 'typeorm';
 
 import * as uuid from 'uuid';
 import { createHash } from 'crypto';
 
-import { Link } from '../entities/link.entity';
-import { User } from '../entities/user.entity';
+import { Link } from './entities/link.entity';
+import { User } from '../auth/entities/user.entity';
 
-import { FullLinkDTO } from '../dto/full_link.dto';
-import { ShortLinkDTO } from '../dto/short_link.dto';
-import { ShortenedLinkDTO } from '../dto/shortened_link.dto';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { FullLinkDTO } from './dto/full_link.dto';
+import { ShortLinkDTO } from './dto/short_link.dto';
+import { ShortenedLinkDTO } from './dto/shortened_link.dto';
 
 @Injectable()
 export class ShortenerService {
@@ -45,7 +45,6 @@ export class ShortenerService {
       link.full = fullLink.link;
 
       link = await this.linksRepository.save(link);
-      console.log('saved link:', link);
     }
 
     const dto = new ShortenedLinkDTO();

@@ -7,11 +7,11 @@ import { Repository } from 'typeorm';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import * as bcrypt from 'bcrypt';
 
-import { UserCredentialsDTO } from '../dto/user_credentials.dto';
-import { User } from '../entities/user.entity';
-import { RefreshToken } from 'src/entities/refreshtoken.entity';
-import { RefreshTokenDTO } from 'src/dto/refresh_token.dto';
-import { AuthTokensDTO } from 'src/dto/auth_tokens.dto';
+import { User } from './entities/user.entity';
+import { UserCredentialsDTO } from './dto/user_credentials.dto';
+import { RefreshToken } from './entities/refreshtoken.entity';
+import { RefreshTokenDTO } from './dto/refresh_token.dto';
+import { AuthTokensDTO } from './dto/auth_tokens.dto';
 
 @Injectable()
 export class AuthService {

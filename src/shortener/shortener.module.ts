@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { JWTStrategy } from 'src/auth/strategies/jwt.strategy';
 
-import { Link } from 'src/entities/link.entity';
-import { RefreshToken } from 'src/entities/refreshtoken.entity';
-import { User } from 'src/entities/user.entity';
+import { Link } from './entities/link.entity';
+import { RefreshToken } from '../auth/entities/refreshtoken.entity';
+import { User } from '../auth/entities/user.entity';
 
 import { ShortenerController } from './shortener.controller';
 import { ShortenerService } from './shortener.service';

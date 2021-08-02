@@ -1,13 +1,11 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   UsePipes,
   ValidationPipe,
   UseGuards,
   Request,
-  Param,
   HttpCode,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,12 +15,12 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 
-import { UserCredentialsDTO } from '../dto/user_credentials.dto';
+import { UserCredentialsDTO } from './dto/user_credentials.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
-import { RefreshToken } from '../entities/refreshtoken.entity';
-import { RefreshTokenDTO } from '../dto/refresh_token.dto';
-import { AuthTokensDTO } from '../dto/auth_tokens.dto';
+import { RefreshToken } from './entities/refreshtoken.entity';
+import { RefreshTokenDTO } from './dto/refresh_token.dto';
+import { AuthTokensDTO } from './dto/auth_tokens.dto';
 
 @Controller('auth')
 @ApiTags('auth')

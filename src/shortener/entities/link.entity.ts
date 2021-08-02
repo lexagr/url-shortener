@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-import { User } from './user.entity';
+import { User } from '../../auth/entities/user.entity';
 
 @Entity('links')
 export class Link {

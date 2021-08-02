@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,8 +8,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 
 import { AuthService } from '../auth.service';
 
-import { User } from 'src/entities/user.entity';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class JWTStrategy extends PassportStrategy(Strategy) {

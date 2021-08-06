@@ -55,7 +55,7 @@ export class AuthService {
     return authTokens;
   }
 
-  async validateCredentials(username: string, password: string): Promise<any> {
+  async validateCredentials(username: string, password: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: {
         username,

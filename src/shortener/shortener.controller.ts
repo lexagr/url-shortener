@@ -51,7 +51,6 @@ export class ShortenerController {
   }
 
   @Get(':link')
-  @UsePipes(new ValidationPipe())
   @ApiOperation({ summary: 'Get location header for shortlink' })
   @ApiResponse({ status: 302, description: 'Found' })
   @ApiResponse({ status: 400, description: "Link doesn't exists" })
@@ -62,7 +61,6 @@ export class ShortenerController {
 
   @Post(':link')
   @UseGuards(JWTAuthGuard)
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @ApiOperation({ summary: 'Update link' })
   @ApiResponse({ status: 200, description: 'Link successfully updated' })

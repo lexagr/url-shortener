@@ -73,6 +73,7 @@ export class ShortenerController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete link' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Link successfully deleted' })
   async delete(@Param() shortLink: ShortLinkDTO, @Request() req) {
     return this.shortenerService.deleteLink(req.user, shortLink);

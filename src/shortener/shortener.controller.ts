@@ -42,11 +42,7 @@ export class ShortenerController {
   @UseGuards(JWTAuthGuard)
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @ApiOperation({ summary: 'Short any link' })
-  @ApiResponse({
-    status: 201,
-    description: 'Link successfully created',
-    type: ShortenedLinkDTO,
-  })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 401,
     description: 'User unauthorized',
@@ -68,6 +64,7 @@ export class ShortenerController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update link' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Link successfully updated' })
   @ApiResponse({ status: 400, description: "Link doesn't exists" })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -85,6 +82,7 @@ export class ShortenerController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete link' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Link successfully deleted' })
   @ApiResponse({ status: 400, description: "Link doesn't exists" })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

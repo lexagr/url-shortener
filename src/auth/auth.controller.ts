@@ -41,13 +41,7 @@ export class AuthController {
     description: 'User credentials',
     required: true,
   })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns JWT tokens (access, refresh)',
-    type: AuthTokensDTO,
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Request() req): Promise<any> {
+  async login(@Request() req): Promise<AuthTokensDTO> {
     return this.authService.generateTokensForUser(req.user);
   }
 

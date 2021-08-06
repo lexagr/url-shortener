@@ -49,7 +49,6 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({ status: 201, description: 'User created/exists' })
-  @ApiResponse({ status: 400, description: 'Wrong input data' })
   register(@Body() body: UserCredentialsDTO): any {
     return this.authService.registerNewUser(body);
   }
@@ -59,7 +58,6 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Refresh tokens' })
   @ApiResponse({ status: 200, description: 'Tokens refreshed' })
-  @ApiResponse({ status: 400, description: 'Invalid tokens' })
   refresh(@Body() token: RefreshTokenDTO): any {
     return this.authService.refreshToken(token);
   }

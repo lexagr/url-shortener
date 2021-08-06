@@ -70,7 +70,6 @@ export class ShortenerController {
 
   @Delete(':link')
   @UseGuards(JWTAuthGuard)
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete link' })
   @ApiResponse({ status: 200, description: 'Link successfully deleted' })

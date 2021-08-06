@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Delete,
   Body,
   Param,
@@ -54,7 +55,7 @@ export class ShortenerController {
     res.set('Location', fullLink.link).status(302).send('Found');
   }
 
-  @Post(':link')
+  @Put(':link')
   @UseGuards(JWTAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update link' })

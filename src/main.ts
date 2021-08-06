@@ -11,6 +11,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('shortener_service')
     .addTag('auth')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
